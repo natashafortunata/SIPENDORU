@@ -166,6 +166,12 @@ return function (App $app) {
                 return $response->withJson(["status"=>"gagal","data"=>"0"], 200);
             
         });
+
+        $app->post("/tugas", function (Request $request, Response $response){
+            $tugas_baru = $request->getParsedBody();
+            $sql = "INSERT INTO tugas (kode,judul,catatan,rubrik,lampiran,waktu_tampil,waktu_tenggat,keterlambatan,created_at,id_pertemuan,is_active) VALUE (:kode,:judul,:catatan,:rubrik,:lampiran,:waktu_tampil,:waktu_tenggat,:keterlambatan,:created_at,:id_pertemuan,:is_active)";
+            $
+        });
     });
 
     $app->group("/viewall", function (App $app){
@@ -192,6 +198,7 @@ return function (App $app) {
             $result = $data->fetchall();
             return $response->withJson(["status"=>"sukses","data"=>$result],200);
         });
+
 
 
     });
