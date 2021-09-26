@@ -21,7 +21,7 @@ return [
             'host'=> 'localhost',
             'user'=> 'root',
             'pass'=> '',
-            'dbname'=> 'lpaip_sipendoru',
+            'dbname'=> 'sipendoru',
             'driver'=> 'mysql'
         ],
 

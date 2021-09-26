@@ -61,24 +61,21 @@ return function (App $app) {
                 return $response->withJson(["status"=>"gagal","data"=>"0"], 200);
         });
 
-        $app->post("/unit", function(Request $request, Response $response){
-            //$json = $request->getParsedBody();
-            //$input = json_decode($json, true);
-            $unit_baru = $request->getParsedBody();
-            $sql = "INSERT INTO unit (nama, alamat, telepon, email, induk_unit) VALUE (:nama, :alamat, :telepon, :email, :induk_unit)";
-            $db = $this->db->prepare($sql);
+        $app->post("/anggota_kelas", function (Request $request, Response $response){
+            $kelas_anggota = $request->getParsedBody();
+            $sql = "INSERT INTO kelas_anggota (id_kelas,id_pengguna,created_at,is_active) VALUE (:id_kelas,:id_pengguna,:created_at,:is_active)";
+            $db = $this->prepare($sql);
 
             $data = [
-                ":nama"=>$unit_baru["nama"],
-                ":alamat"=>$unit_baru["alamat"],
-                ":telepon"=>$unit_baru["telepon"],
-                ":email"=>$unit_baru["email"],
-                ":induk_unit"=>$unit_baru["induk_unit"]
+                ":id_kelas"=>$kelas_anggota["id_kelas"],
+                ":id_pengguna"=>$kelas_anggota["id_pengguna"],
+                ":created_at"=>$kelas_anggota["created_at"],
+                ":is_active"=>$kelas_anggota["is_active"]
             ];
 
             if($db->execute($data))
-                return $response->withJson(["status"=>"berhasil","data"=>"1"], 200);
-                return $response->withJson(["status"=>"gagal","data"=>"0"], 200);
+                return $response->withJson(["status"=>"berhasil","data"=>"1"],200);
+                return $response->withJson(["status"=>"gagal","data"=>"0"],200);
         });
 
         $app->post("/pengguna", function(Request $request, Response $response){
@@ -87,7 +84,7 @@ return function (App $app) {
             $db = $this->db->prepare($sql);
 
             $data = [
-                ":username"=>$user_baru["nama"],
+                ":username"=>$user_baru["username"],
                 ":password"=>$user_baru["password"],
                 ":email"=>$user_baru["email"],
                 ":nama"=>$user_baru["nama"],
@@ -112,34 +109,26 @@ return function (App $app) {
                 return $response->withJson(["status"=>"gagal","data"=>"0"], 200);
         });
 
-        $app->post("/pendidikan", function (Request $request, Response $response){
-            $list = $request->getParsedBody();
-            $sql = "INSERT INTO pendidikan_riwayat(nama_jenjang, nama_instansi, jurusan, tahun_lulus,keterangan,id_pengguna) VALUE (:nama_jenjang,:nama_instansi,:jurusan,:tahun_lulus,:keterangan,:id_pengguna)";
-            $db = $this->db->prepare($sql);
+        $app->post("/pengguna_peran", function(Request $request, Response $response){
+            $pengguna_peran = $request->getParsedBody();
+            $sql = "INSERT INTO pengguna_peran (id_pengguna,id_peran,created_at,is_active) VALUE (:id_pengguna,:id_peran,:created_at,:is_active)";
+            $db = $this->prepare($sql);
 
             $data = [
-                ":nama_jenjang"=>$list["nama_jenjang"],
-                ":nama_instansi"=>$list["nama_instansi"],
-                ":jurusan"=>$list["jurusan"],
-                ":tahun_lulus"=>$list["tahun_lulus"],
-                ":keterangan"=>$list["keterangan"],
-                ":id_pengguna"=>$list["id_pengguna"]
+                ":id_pengguna"=>$pengguna_peran["id_pengguna"],
+                ":id_peran"=>$pengguna_peran["id_peran"],
+                ":created_at"=>$pengguna_peran["created_at"],
+                ":is_active"=>$pengguna_peran["is_active"]
             ];
 
             if($db->execute($data))
-                return $response->withJson(["status"=>"berhasil","data"=>"1"], 200);
-                return $response->withJson(["status"=>"gagal","data"=>"0"], 200);
-            
-            /*$json = $request->getParsedBody();
-            if($json){
-                return $response->withJson(["status"=>"berhasil","data"=>"1"], 200);
-                return $response->withJson(["status"=>"gagal","data"=>"0"], 200);
-            }*/
+                return $response->withJson(["status"=>"berhasil","data"=>"1"],200);
+                return $response->withJson(["status"=>"gagal","data"=>"0"],200);
         });
 
         $app->post("/pertemuan", function (Request $request, Response $response){
             $pertemuan_baru = $request->getParsedBody();
-            $sql = "INSERT INTO pertemuan(kode,nama,tanggal,deskripsi,tautan_tempat,sub_cp,materi,indikator,metode_penilaian, metode_pembelajaran, pustaka, bobot,pengajar,tipe,id_kelas,created_at,is_active)VALUE(:kode,:nama,:tanggal,:deskripsi,:tautan_tempat,:sub_cp,:materi,:indikator,:metode_penilaian,:metode_pembelajaran,:pustaka,:bobot,:pengajar,:tipe,:id_kelas,:created_at,:is_active)";
+            $sql = "INSERT INTO pertemuan(kode,nama,tanggal,deskripsi,tempat,sub_cp,materi,indikator,metode_penilaian, metode_pembelajaran,pustaka,bobot,tipe_pertemuan,id_kelas,created_at,is_active)VALUE(:kode,:nama,:tanggal,:deskripsi,:tempat,:sub_cp,:materi,:indikator,:metode_penilaian,:metode_pembelajaran,:pustaka,:bobot,:tipe_pertemuan,:id_kelas,:created_at,:is_active)";
             $db = $this->prepare($sql);
 
             $data = [
@@ -147,7 +136,7 @@ return function (App $app) {
                 ":nama"=>$pertemuan_baru["nama"],
                 ":tanggal"=>$pertemuan_baru["tanggal"],
                 ":deskripsi"=>$pertemuan_baru["deskripsi"],
-                ":tautan_tempat"=>$pertemuan_baru["tautan_tempat"],
+                ":tempat"=>$pertemuan_baru["tempat"],
                 ":sub_cp"=>$pertemuan_baru["sub_cp"],
                 ":materi"=>$pertemuan_baru["materi"],
                 ":indikator"=>$pertemuan_baru["indikator"],
@@ -155,7 +144,7 @@ return function (App $app) {
                 ":metode_pembelajaran"=>$pertemuan_baru["metode_pembelajaran"],
                 ":pustaka"=>$pertemuan_baru["pustaka"],
                 ":bobot"=>$pertemuan_baru["bobot"],
-                ":pengajar"=>$pertemuan_baru["pengajar"],
+                ":tipe_pertemuan"=>$pertemuan_baru["tipe_pertemuan"],
                 ":id_kelas"=>$pertemuan_baru["id_kelas"],
                 ":created_at"=>$pertemuan_baru["created_at"],
                 ":is_active"=>$pertemuan_baru["is_active"]
@@ -169,38 +158,183 @@ return function (App $app) {
 
         $app->post("/tugas", function (Request $request, Response $response){
             $tugas_baru = $request->getParsedBody();
-            $sql = "INSERT INTO tugas (kode,judul,catatan,rubrik,lampiran,waktu_tampil,waktu_tenggat,keterlambatan,created_at,id_pertemuan,is_active) VALUE (:kode,:judul,:catatan,:rubrik,:lampiran,:waktu_tampil,:waktu_tenggat,:keterlambatan,:created_at,:id_pertemuan,:is_active)";
-            $
+            $sql = "INSERT INTO tugas (kode,judul,catatan,rubrik,lampiran,waktu_tampil,waktu_tenggat,keterlambatan,created_at,id_kelas,id_pertemuan,is_active) VALUE (:kode,:judul,:catatan,:rubrik,:lampiran,:waktu_tampil,:waktu_tenggat,:keterlambatan,:created_at,:id_kelas,:id_pertemuan,:is_active)";
+            $db = $this->prepare($sql);
+
+            $data =[
+                ":kode"=>$tugas_baru["kode"],
+                ":judul"=>$tugas_baru["judul"],
+                ":catatan"=>$tugas_baru["catatan"],
+                ":rubrik"=>$tugas_baru["rubrik"],
+                ":lampiran"=>$tugas_baru["lampiran"],
+                ":waktu_tampil"=>$tugas_baru["waktu_tampil"],
+                ":waktu_tenggat"=>$tugas_baru["waktu_tenggat"],
+                ":keterlambatan"=>$tugas_baru["keterlambatan"],
+                ":created_at"=>$tugas_baru["created_at"],
+                ":id_kelas"=>$tugas_baru["id_kelas"],
+                ":id_pertemuan"=>$tugas_baru["id_pertemuan"],
+                ":is_active"=>$tugas_baru["is_active"]
+            ];
+
+            if($db->execute($data))
+                return $response->withJson(["status"=>"berhasil","data"=>"1"], 200);
+                return $response->withJson(["status"=>"gagal", "data"=>"0"], 200);
+        });
+
+        $app->post("/lembar_kerja", function (Request $request, Response $response){
+            $lembar_kerja = $request->getParsedBody();
+            $sql = "INSERT INTO tugas_lembar_kerja (kode,catatan,umpan_balik,lampiran,terlambat,skor,submitted_at,created_at,id_pengguna,id_tugas,is_active) VALUE (:kode,:catatan,:umpan_balik,:lampiran,:terlambat,:skor,:submitted_at,:created_at,:id_pengguna,:id_tugas,:is_active)";
+            $db = $this->prepare($sql);
+
+            $data = [
+                ":kode"=>$lembar_kerja["kode"],
+                ":catatan"=>$lembar_kerja["catatan"],
+                ":umpan_balik"=>$lembar_kerja["umpan_balik"],
+                ":lampiran"=>$lembar_kerja["lampiran"],
+                ":terlambat"=>$lembar_kerja["terlambat"],
+                ":skor"=>$lembar_kerja["skor"],
+                ":submitted_at"=>$lembar_kerja["submitted_at"],
+                ":created_at"=>$lembar_kerja["created_at"],
+                ":id_pengguna"=>$lembar_kerja["id_pengguna"],
+                ":id_tugas"=>$lembar_kerja["id_tugas"],
+                ":is_active"=>$lembar_kerja["is_active"]
+            ];
+
+            if($db->execute($data))
+                return $response->withJson(["status"=>"berhasil","data"=>"1"],200);
+                return $response->withJson(["status"=>"gagal","data"=>"0"],200);
+        });
+
+        $app->post("/jurnal", function (Request $request, Response $response){
+            $pertemuan_jurnal = $request->getParsedBody();
+            $sql = "INSERT INTO pertemuan_jurnal (kode,tanggal,tempat,kegiatan,uraian,catatan,tipe,created_at,peserta,pengajar,id_pertemuan,is_active) VALUE (:kode,:tanggal,:tempat,:kegiatan,:uraian,:catatan,:tipe,:created_at,:peserta,:pengajar,:id_pertemuan,:is_active)";
+            $db = $this->prepare($sql);
+
+            $data = [
+                ":kode"=>$pertemuan_jurnal["kode"],
+                ":tanggal"=>$pertemuan_jurnal["tanggal"],
+                ":tempat"=>$pertemuan_jurnal["tempat"],
+                ":kegiatan"=>$pertemuan_jurnal["kegiatan"],
+                ":uraian"=>$pertemuan_jurnal["uraian"],
+                ":catatan"=>$pertemuan_jurnal["catatan"],
+                ":tipe"=>$pertemuan_jurnal["tipe"],
+                ":created_at"=>$pertemuan_jurnal["created_at"],
+                ":peserta"=>$pertemuan_jurnal["peserta"],
+                ":pengajar"=>$pertemuan_jurnal["pengajar"],
+                ":id_pertemuan"=>$pertemuan_jurnal["id_pertemuan"],
+                ":is_active"=>$pertemuan_jurnal["is_active"]
+            ];
+
+            if($db->execute($data))
+                return $response->withJson(["status"=>"berhasil","data"=>"1"],200);
+                return $response->withJson(["status"=>"gagal","data"=>"0"],200);
+        });
+
+        $app->post("/komentar", function (Request $request, Response $response){
+            $komentar = $request->getParsedBody();
+            $sql = "INSERT INTO postingan_komentar (pesan,created_at,id_pengguna,id_postingan) VALUE (:pesan,:created_at,:id_pengguna,:id_postingan)";
+            $db = $this->prepare($sql);
+
+            $data = [
+                ":pesan"=>$komentar["judul"],
+                ":created_at"=>$komentar["created_at"],
+                ":id_pengguna"=>$komentar["id_pengguna"],
+                ":id_postingan"=>$komentar["id_kelas"]
+            ];
+
+            if($db->execute($data))
+            return $response->withJson(["status"=>"berhasil","data"=>"1"],200);
+            return $response->withJson(["status"=>"gagal","data"=>"0"],200);
+        });
+
+        $app->post("/postingan", function (Request $request, Response $response){
+            $postingan = $request->getParsedBody();
+            $sql = "INSERT INTO postingan (kode,judul,pesan,tipe_postingan,id_pengguna,id_kelas,id_pertemuan,created_at,is_active) VALUE (:kode,:judul,:pesan,:tipe_postingan,:id_pengguna,:id_kelas,:id_pertemuan,:created_at,:is_active)";
+            $sql .= "INSERT INTO postingan_komentar (pesan, created_at, id_pengguna, id_postingan) VALUE (:pesan,:created_at,:id_pengguna,:id_postingan)";
+            $db = $this->prepare($sql);
+
+            $data = [
+                ":kode"=>$postingan["kode"],
+                ":judul"=>$postingan["judul"],
+                ":pesan"=>$postingan["pesan"],
+                ":tipe_postingan"=>$postingan["tipe_postingan"],
+                ":id_pengguna"=>$postingan["id_pengguna"],
+                ":id_kelas"=>$postingan["id_kelas"],
+                ":id_pertemuan"=>$postingan["id_pertemuan"],
+                ":created_at"=>$postingan["creates_at"],
+                ":is_active"=>$postingan["is_active"]
+            ];
+            /*$data = [
+                ":pesan"=>$postingan["pesan"],
+                ":created_at"=>$postingan["created_at"],
+                ":id_pengguna"=>$postingan["id_pengguna"],
+                ":id_postingan"=>$postingan["id_postingan"]
+            ];*/
+
+            if($db->execute($data))
+                return $response->withJson(["status"=>"berhasil","data"=>"1"],200);
+                return $response->withJson(["status"=>"gagal","data"=>"0"],200);
+        });
+
+        $app->post("/lampiran", function (Request $request, Response $response){
+            $lampiran = $request->getParsedBody();
+            $sql = "INSERT INTO postingan_lampiran (id_kelas_berkas,id_postingan,is_active) VALUE (:id_kelas_berkas,:id_postingan,:is_active)";
+            $db = $this->prepare($sql);
+
+            $data = [
+                ":id_kelas_berkas"=>$lampiran["id_kelas_berkas"],
+                ":id_postingan"=>$lampiran["id_postingan"], 
+                ":is_active"=>$lampiran["is_active"]
+            ];
+
+            if($db->execute($data))
+                return $response->withJson(["status"=>"berhasil","data"=>"1"],200);
+                return $response->withJson(["status"=>"gagal","data"=>"0"], 200);
+
         });
     });
 
     $app->group("/viewall", function (App $app){
-        $app->get("/role", function (Request $request, Response $response){
+        /*$app->get("/role", function (Request $request, Response $response){
             $sql = "SELECT *FROM peran";
             $data = $this->db->prepare($sql);
             $data->execute();
             $result = $data->fetchall();
             return $response->withJson(["status"=>"sukses","data"=>$result],200);
+        });*/
+
+        $app->get("/kelas_anggota/{id_kelas}", function(Request $request, Response $response, $args){
+            $id = $args["id_kelas"];
+            $sql = "SELECT * FROM kelas_anggota WHERE id_pengguna=:id_kelas";
+            $data = $this->db->prepare($sql);
+            $data->execute([":id_kelas" => $id]);
+            $result = $data->fetchall();
+            return $response->withJson(["status"=>"sukses","data"=>$result],200);
+            return $response->withJson(["status"=>"gagal","data"=>"0"],200);
         });
 
-        $app->get("kelas", function(Request $request, Response $response){
-            $sql = "SELECT * FROM kelas";
+        $app->get("/pertemuan_anggota/{id_pertemuan}", function(Request $request, Response $response, $args){
+            $id = $args["id_pertemuan"];
+            $sql = "SELECT *FROM pertemuan_anggota WHERE id_pengguna=:id_pertemuan";
+            $data = $this->db->prepare($sql);
+            $data->execute([":id_pertemuan"=>$id]);
+            $result = $data->fetchall();
+            return $response->withJson(["status"=>"sukses","data"=>$result],200);
+            return $response->withJson(["status"=>"gagal","data"=>"0"],200);
+        });
+
+        $app->get("/anggota/{id_pertemuan}", function(Request $request, Response $response, $args){
+            $id_pertemuan = $args["id_pertemuan"];
+            $sql = "SELECT *FROM pertemuan_anggota WHERE id_pertemuan:=id_pertemuan";
             $data = $this->db->prepare($sql);
             $data->execute();
-            $result = $data->fetchall();
+            $result = $data->fetch();
             return $response->withJson(["status"=>"sukses","data"=>$result],200);
         });
 
-        $app->get("/pertemuan", function(Request $request, Response $response){
-            $sql = "SELECT *FROM pertemuan";
-            $data = $this->db->prepare($sql);
-            $data->execute();
-            $result = $data->fetchall();
-            return $response->withJson(["status"=>"sukses","data"=>$result],200);
-        });
-
-
-
+        
+        
+        
     });
 
     /*$app->get('/[{name}]', function (Request $request, Response $response, array $args) use ($container) {
@@ -209,35 +343,6 @@ return function (App $app) {
 
         // Render index view
         return $container->get('renderer')->render($response, 'index.phtml', $args);
-    });
-
-    $app->get("/pengguna", function (Request $request, Response $response){
-        $sql = "SELECT * FROM pengguna";
-        $data = $this->db->prepare($sql);
-        $data->execute();
-        $result = $data->fetchall();
-        return $response->withJson(["status"=>"berhasil","data"=>$result], 200);
-    });
-
-    $app->get("/pengguna/{id_pengguna}", function(Request $request, Response $response){
-        return $response->withJson(["status"=>"berhasil","data"=>$request], 200);
-    });
-
-    $app->post("/pengguna/q", function(Request $request, Response $response){
-        $user_baru = $request->getParsedBody();
-        $sql = "INSERT INTO pengguna (nama, email, password, role) VALUE (:nama, :email, :password, :role)";
-        $db = $this->db->prepare($sql);
-
-        $data = [
-            ":nama"=>$user_baru["nama"],
-            ":email"=>$user_baru["email"],
-            ":password"=>$user_baru["password"],
-            ":role"=>$user_baru["role"]
-        ];
-
-        if($db->execute($data))
-            return $response->withJson(["status"=>"berhasil","data"=>"1"], 200);
-            return $response->withJson(["status"=>"gagal","data"=>"0"], 200);
     });
 
     $app->put("/peserta/{id_peserta}", function(Request $request, Response $response){
